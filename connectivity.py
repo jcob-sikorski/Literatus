@@ -252,6 +252,23 @@ def con_algo():
     #plt.title('im')
     #plt.colorbar()
     #plt.show()
+    
+    bounding_box_for_each_letter = {}
+
+    for i in n_highest_letters_sorted:
+        bounding_box_for_each_letter[i] = []
+
+    for i in n_highest_letters_sorted:
+        top = coordinates[i][0]
+        left = coordinates[i][1]
+        bottom = coordinate[i][2]
+        right = coordinates[i][3]
+
+        for ri, row in enumerate(matrix):
+            for ei, elem in enumerate(matrix):
+                if top >= ri and ri <= bottom and left >= ei and ei <= right:
+
+                    bounding_box_for_each_letter.setdefault(value_sought, []).append((column_index, len(matrix[0]) - row_index))
 
     return coordinates
     # crop(left, upper, right, and lower)
