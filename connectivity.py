@@ -157,6 +157,8 @@ def con_algo():
 
     n_highest_letters_sorted = sorted(n_highest_letters)  
 
+    copy_of_n_highest_letters_sorted = list(n_highest_letters_sorted)
+
     print(n_highest_letters_sorted)
 
     # dict with coordinates for every edge of letter, letter: [(top), (left), (bottom), (right)]
@@ -172,7 +174,7 @@ def con_algo():
             for value_sought_index, value_sought in enumerate(n_highest_letters_sorted):
                 if value_present == value_sought:
                 
-                    coordinates.setdefault(value_sought, []).append((row_index, column_index))
+                    coordinates.setdefault(value_sought, []).append(row_index)#((row_index, column_index))
                     n_highest_letters_sorted.pop(value_sought_index)
                     break
 
@@ -189,7 +191,7 @@ def con_algo():
             for value_sought_index, value_sought in enumerate(n_highest_letters_sorted):
                 if value_present == value_sought:
 
-                    coordinates.setdefault(value_sought, []).append((len(matrix[0]) - column_index, row_index))
+                    coordinates.setdefault(value_sought, []).append(row_index)#((len(matrix[0]) - column_index, row_index))
 
                     n_highest_letters_sorted.pop(value_sought_index)
                     break
@@ -203,7 +205,7 @@ def con_algo():
 
     im_180 = rotate90Clockwise(im_90)
 
-    n_highest_letters_sorted = sorted(n_highest_letters) 
+    n_highest_letters_sorted = sorted(n_highest_letters)
 
     for row_index, row in enumerate(im_180):
         if not n_highest_letters_sorted: break
@@ -212,7 +214,7 @@ def con_algo():
             for value_sought_index, value_sought in enumerate(n_highest_letters_sorted):
                 if value_present == value_sought:
 
-                    coordinates.setdefault(value_sought, []).append((len(matrix[0]) - row_index, len(matrix[0]) - column_index))
+                    coordinates.setdefault(value_sought, []).append(len(matrix[0]) - row_index)#((len(matrix[0]) - row_index, len(matrix[0]) - column_index))
 
                     n_highest_letters_sorted.pop(value_sought_index)
                     break
@@ -235,7 +237,7 @@ def con_algo():
             for value_sought_index, value_sought in enumerate(n_highest_letters_sorted):
                 if value_present == value_sought:
 
-                    coordinates.setdefault(value_sought, []).append((column_index, len(matrix[0]) - row_index))
+                    coordinates.setdefault(value_sought, []).append(len(matrix[0]) - row_index)#((column_index, len(matrix[0]) - row_index))
 
                     n_highest_letters_sorted.pop(value_sought_index)
                     break
@@ -248,27 +250,48 @@ def con_algo():
     #plt.colorbar()
     #plt.show()
 
-    #plt.imshow(rotate90Clockwise(matrix), interpolation='nearest')
-    #plt.title('im')
-    #plt.colorbar()
-    #plt.show()
-    
+    plt.imshow(rotate90Clockwise(matrix), interpolation='nearest')
+    plt.title('im')
+    plt.colorbar()
+    plt.show()
+
     bounding_box_for_each_letter = {}
 
-    for i in n_highest_letters_sorted:
+    print(f'copy_of_n_highest_letters_sorted   {copy_of_n_highest_letters_sorted}')
+
+    for i in copy_of_n_highest_letters_sorted:
         bounding_box_for_each_letter[i] = []
 
-    for i in n_highest_letters_sorted:
+    print(f'bounding_box_for_each_letter   {bounding_box_for_each_letter}')
+
+    for i in copy_of_n_highest_letters_sorted:
         top = coordinates[i][0]
         left = coordinates[i][1]
-        bottom = coordinate[i][2]
+        bottom = coordinates[i][2]
         right = coordinates[i][3]
 
         for ri, row in enumerate(matrix):
             for ei, elem in enumerate(matrix):
                 if top >= ri and ri <= bottom and left >= ei and ei <= right:
+                    bounding_box_for_each_letter.setdefault(i, []).append(matrix[ri][ei])
 
-                    bounding_box_for_each_letter.setdefault(value_sought, []).append((column_index, len(matrix[0]) - row_index))
+    print(bounding_box_for_each_letter)
+
+    #horizontal_cells = 10
+	#vertical_cells = 10
+	#horizontal_ratio = im.size[0]//horizontal_cells
+	#vertical_ratio = im.size[1]//vertical_cells
+	#values = []
+	#for i in range(horizontal_cells):
+	#	for j in range(vertical_cells):
+	#		cellsum=0
+	#		for x in range(horizontal_ratio):
+	#			for y in range(vertical_ratio):
+	#				cellsum+=im.getpixel(((i*horizontal_ratio)+x,(j*vertical_ratio)+y))[0]
+	#		cellvalue = cellsum//(horizontal_ratio*vertical_ratio)
+	#		values.append(cellvalue)
 
     return coordinates
     # crop(left, upper, right, and lower)
+
+con_algo()
