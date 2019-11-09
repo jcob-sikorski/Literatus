@@ -1,52 +1,43 @@
-def black_white_im():
-    '''
-    Function changes image to new image with only black and white colours.
-    '''
-
-    # library with necessary functions to work with image
+def bw_pixels_to_matrix():
+    'Returns matrix with 0s for white and 1s for black pixels.'
+    
     from PIL import Image
 
-    # to delete processed image
-    # from os import remove
-
-    # contains set image
-    path = str(input(r'Please specify the path to image: '))
-
-    im = Image.open(path)
-
-    # contains set image with alpha value
-    rgb_im = im.convert('RGB')
-    re_rgb_im = rgb_im.resize((81, 81), 0)
-
-    # lower bound for whiteness
-    white_threshold = 80
-
-    print('Normalizing image...')
-
-    # transforms to black-white
-    # width
-    for x in range(re_rgb_im.size[0]):
-
-        # height
-        for y in range(re_rgb_im.size[1]):
-
-            # tuple containing rgb values
-            pixel = re_rgb_im.getpixel((x, y))
-        
-            # if rgb value is less than 50 then change it to white
-            if pixel[:3] > (white_threshold, white_threshold, white_threshold):
-                re_rgb_im.putpixel((x, y), (255, 255, 255))
-
-            # else change it to black
-            else:
-                re_rgb_im.putpixel((x, y), (0, 0, 0))
+    from rotate_matrix import rotate90Clockwise
     
-    re_rgb_im.save('normalized.png')
+    im = Image.open(r'C:\Users\jmsie\Dev\Projects\normalized.png')
 
-    print('Image processed and normalized!')
+    # coordinates (x, y)
+    counter = 0
 
-# try:
-#     remove(r"normalized.png")
-# except FileNotFoundError:
-#     print("Did you forget adding your image?")
-#     print('\nMaybe path to your image is invalid?')
+    matrix = []
+    row = []
+
+    black = 1
+
+    print(im.size[0])
+    print(im.size[1])
+    # loops through pixels in image and creates matrix of black(1) and white(0) values for pixel
+    for xi in range(im.size[0]):
+        for yi in range(im.size[1]):
+            
+            counter += 1
+
+            if counter == im.size[0]:
+                
+                counter = 0
+                
+                matrix.append(row)
+                row = []
+            
+            pixel = im.getpixel((yi, xi))
+            
+            if pixel[:3] == (255, 255, 255):
+                row.append(0)
+
+            elif pixel[:3] == (0, 0, 0):
+                row.append(1)
+
+    matrix[0].append(0)
+
+    return matrix
