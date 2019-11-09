@@ -274,8 +274,8 @@ def con_algo():
         bottom = coordinates[i][2]
         right = coordinates[i][3]
 
-        print(top, left, bottom, right)
-        print(i)
+        #print(top, left, bottom, right)
+        #print(i)
 
         for ri, row in enumerate(matrix):
             for ei, elem in enumerate(row):
@@ -290,9 +290,12 @@ def con_algo():
 
                     ro.append(elem)
     
-    for i in bounding_box_for_each_letter[4]:
-        print(i)
+    current = 0
 
+    for i in copy_of_n_highest_letters_sorted:
+        current = i
+        for letter in bounding_box_for_each_letter[i]:
+            print(letter)
     #horizontal_cells = 10
 	#vertical_cells = 10
 	#horizontal_ratio = im.size[0]//horizontal_cells
