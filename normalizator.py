@@ -1,6 +1,6 @@
 def black_white_im():
     '''
-    Function changes image to new image with only black and white colours. 0s and 1s
+    Function changes image to new image with only black and white colours.
     '''
 
     # library with necessary functions to work with image
@@ -16,10 +16,10 @@ def black_white_im():
 
     # contains set image with alpha value
     rgb_im = im.convert('RGB')
-    re_rgb_im = rgb_im.resize((100, 100), 0)
+    re_rgb_im = rgb_im.resize((81, 81), 0)
 
     # lower bound for whiteness
-    white_threshold = 50
+    white_threshold = 80
 
     print('Normalizing image...')
 
@@ -44,3 +44,9 @@ def black_white_im():
     re_rgb_im.save('normalized.png')
 
     print('Image processed and normalized!')
+
+# try:
+#     remove(r"normalized.png")
+# except FileNotFoundError:
+#     print("Did you forget adding your image?")
+#     print('\nMaybe path to your image is invalid?')
