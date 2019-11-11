@@ -1,9 +1,12 @@
 def con_algo():
     'Distinguishes n letters from black and white pixels (1s, 0s) in given image and forms them as letters with their real number counting left to right.'
+    "Generally this tool can be used to identify every object in image, but only when background isn't various."
 
     number_from_user = int(input('How many letters are in the image? number = '))
 
     import numpy as np
+
+    import matlab
 
     from matplotlib import pyplot as plt
 
@@ -157,6 +160,7 @@ def con_algo():
 
     n_highest_letters_sorted = sorted(n_highest_letters)  
 
+    # copy because elements in n_highest_letters_sorted will be popped pop()
     copy_of_n_highest_letters_sorted = list(n_highest_letters_sorted)
 
     print(n_highest_letters_sorted)
@@ -164,9 +168,11 @@ def con_algo():
     # dict with coordinates for every edge of letter, letter: [(top), (left), (bottom), (right)]
     coordinates = {}
 
+    # creating list for edges for every letter
     for i in n_highest_letters_sorted:
         coordinates[i] = []
 
+    # adds top coordinates
     for row_index, row in enumerate(matrix):
         if not n_highest_letters_sorted: break
         for column_index, value_present in enumerate(row):
@@ -180,10 +186,12 @@ def con_algo():
 
     #print('top_coordinates ', coordinates)
 
+    # rotating technique to get every edge of letter to crop letter
     im_90 = rotate90Clockwise(matrix)
 
     n_highest_letters_sorted = sorted(n_highest_letters) 
 
+    # adds left coordinates
     for row_index, row in enumerate(im_90):
         if not n_highest_letters_sorted: break
         for column_index, value_present in enumerate(row):
@@ -207,6 +215,7 @@ def con_algo():
 
     n_highest_letters_sorted = sorted(n_highest_letters)
 
+    # adds bottom coordinates
     for row_index, row in enumerate(im_180):
         if not n_highest_letters_sorted: break
         for column_index, value_present in enumerate(row):
@@ -230,6 +239,7 @@ def con_algo():
 
     n_highest_letters_sorted = sorted(n_highest_letters) 
 
+    # adds right coordinates
     for row_index, row in enumerate(im_270):
         if not n_highest_letters_sorted: break
         for column_index, value_present in enumerate(row):
@@ -255,10 +265,12 @@ def con_algo():
     plt.colorbar()
     plt.show()
 
+    # cropped matrices with letter values for every letter in image (now matrix)
     bounding_box_for_each_letter = {}
 
     print(f'copy_of_n_highest_letters_sorted   {copy_of_n_highest_letters_sorted}')
 
+    # creating 2d array for every letter
     for i in copy_of_n_highest_letters_sorted:
         bounding_box_for_each_letter[i] = []
 
@@ -266,9 +278,11 @@ def con_algo():
 
     counter = 0
 
+    # ro = row which is added to bounding_box_for_each_letter then cleared when it's the last element in list (row)
     ro = []
 
     for i in copy_of_n_highest_letters_sorted:
+        # edge of every letter
         top = coordinates[i][0]
         left = coordinates[i][1]
         bottom = coordinates[i][2]
@@ -279,10 +293,11 @@ def con_algo():
 
         for ri, row in enumerate(matrix):
             for ei, elem in enumerate(row):
+                # creating bounding box
                 if top <= ri and ri <= bottom and left <= ei and ei < right:
                     counter += 1
 
-                    if counter == int(right- left):
+                    if counter == int(right - left):
                 
                         counter = 0
                         bounding_box_for_each_letter.setdefault(i, []).append(list(ro))
@@ -296,20 +311,49 @@ def con_algo():
         current = i
         for letter in bounding_box_for_each_letter[i]:
             print(letter)
-    #horizontal_cells = 10
-	#vertical_cells = 10
-	#horizontal_ratio = im.size[0]//horizontal_cells
-	#vertical_ratio = im.size[1]//vertical_cells
-	#values = []
-	#for i in range(horizontal_cells):
-	#	for j in range(vertical_cells):
-	#		cellsum=0
-	#		for x in range(horizontal_ratio):
-	#			for y in range(vertical_ratio):
-	#				cellsum+=im.getpixel(((i*horizontal_ratio)+x,(j*vertical_ratio)+y))[0]
-	#		cellvalue = cellsum//(horizontal_ratio*vertical_ratio)
-	#		values.append(cellvalue)
+        print('\n')
 
+    for i in copy_of_n_highest_letters_sorted:
+
+        matrix_bb = bounding_box_for_each_letter[i]
+        #  HEIGHT DOESN'T WORK, WHERE IS FLOW?
+        height = matlab.size(matrix_bb)
+        print(f'height {height}')
+        weight = len(matrix_bb[0])
+        print(f'weight {weight}')
+
+        height = 0
+        weight = 0
+
+        mean_for_row = []
+
+    #    #for row in matrix_bb:
+    #mean_for_row.append(matlab.mean(matrix, 2))
+
+        ## for every bounding box
+        #horizontal_cells = 10
+        #vertical_cells = 10
+        #horizontal_ratio = weight//horizontal_cells
+        #vertical_ratio = height//vertical_cells
+        #values = []
+
+
+
+        
+        #for i in range(horizontal_cells):
+        #    for j in range(vertical_cells):
+        #        cell_sum = 0
+        #        for x in range(horizontal_ratio):
+        #            for y in range(vertical_ratio):
+        #                #cell_sum += im.getpixel((i * horizontal_ratio) + x, (j * vertical_ratio) + y)[0]
+        #                print(f'matrix_bb[i * horizontal_ratio + x][j * vertical_ratio + y] {matrix_bb[i * horizontal_ratio + x][j * vertical_ratio + y]}')
+        #                cell_sum += matrix_bb[i * horizontal_ratio + x][j * vertical_ratio + y]
+        #                cell_value = cell_sum//(horizontal_ratio * vertical_ratio)
+#
+        #                values.append(cell_value)
+        
+        #bounding_box_for_each_letter[i] = values
+        #values = []
     return coordinates
     # crop(left, upper, right, and lower)
 
