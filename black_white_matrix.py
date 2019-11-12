@@ -15,8 +15,6 @@ def bw_pixels_to_matrix():
 
     black = 1
 
-    print(im.size[0])
-    print(im.size[1])
     # loops through pixels in image and creates matrix of black(1) and white(0) values for pixel
     for xi in range(im.size[0]):
         for yi in range(im.size[1]):
