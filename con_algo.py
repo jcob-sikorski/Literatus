@@ -26,11 +26,6 @@ def con_algo():
 
     matrix = bw()#[[randint(0,1) for i in range(7)] for y in range(7)]
 
-
-    #plt.imshow(matrix, interpolation='nearest')
-    #plt.colorbar()
-    #plt.show()
-
     # x is for counting independent elements in image
     x = 0
 
@@ -91,10 +86,6 @@ def con_algo():
                 else:
                     pass
 
-    #plt.imshow(matrix, interpolation='nearest')
-    #plt.colorbar()
-    #plt.show()
-
     # finds the lowest number in equivalency dictionary
     for ri, row in enumerate(matrix):
         for ei, elem in enumerate(row):
@@ -137,15 +128,6 @@ def con_algo():
     #print('\n')
     print(true_object)
 
-    #print('\n')
-
-    # final approval
-
-    print('\n')
-
-    #for i in matrix:
-    #    print(i)
-
     # dictionary which stores number of every pixel connected with specific object
     count_objects = {}
 
@@ -184,8 +166,6 @@ def con_algo():
                     n_highest_letters_sorted.pop(value_sought_index)
                     break
 
-    #print('top_coordinates ', coordinates)
-
     # rotating technique to get every edge of letter to crop letter
     im_90 = rotate90Clockwise(matrix)
 
@@ -204,13 +184,6 @@ def con_algo():
                     n_highest_letters_sorted.pop(value_sought_index)
                     break
 
-    #print('left_coordinates ', coordinates)
-    #
-    #plt.imshow(im_90, interpolation='nearest')
-    #plt.title('im90')
-    #plt.colorbar()
-    #plt.show()
-
     im_180 = rotate90Clockwise(im_90)
 
     n_highest_letters_sorted = sorted(n_highest_letters)
@@ -227,13 +200,6 @@ def con_algo():
 
                     n_highest_letters_sorted.pop(value_sought_index)
                     break
-
-    #print('bottom_coordinates ', coordinates)
-#
-    #plt.imshow(im_180, interpolation='nearest')
-    #plt.title('im180')
-    #plt.colorbar()
-    #plt.show()
 
     im_270 = rotate90Clockwise(im_180)
 
@@ -254,11 +220,6 @@ def con_algo():
 
 
     print('coordinates ', coordinates)
-#
-    #plt.imshow(im_270, interpolation='nearest')
-    #plt.title('im270')
-    #plt.colorbar()
-    #plt.show()
 
     plt.imshow(rotate90Clockwise(matrix), interpolation='nearest')
     plt.title('im')
@@ -288,9 +249,6 @@ def con_algo():
         bottom = coordinates[i][2]
         right = coordinates[i][3]
 
-        #print(top, left, bottom, right)
-        #print(i)
-
         for ri, row in enumerate(matrix):
             for ei, elem in enumerate(row):
                 # creating bounding box
@@ -304,57 +262,74 @@ def con_algo():
                         ro = []
 
                     ro.append(elem)
-    
-    current = 0
+
+    height = 0
+
+    height_of_each_letter = {}
+
+    # for every bounding box change element value to 1 if value > 0 
+    for i in copy_of_n_highest_letters_sorted:
+        matrix_bb = bounding_box_for_each_letter[i]
+
+        for ri, row in enumerate(matrix_bb):
+            for ei, element in enumerate(row):
+                if matrix_bb[ri][ei] > 0:
+                    matrix_bb[ri][ei] = 1
+
+        bounding_box_for_each_letter[i] = matrix_bb
+
+    # finding height of each letter
+    for i in copy_of_n_highest_letters_sorted:
+        for row in bounding_box_for_each_letter[i]:
+            height += 1
+        height_of_each_letter[i] = height
+        height = 0
+
+    print(height_of_each_letter)
+
+
+    horizontal_cells = 10
+    vertical_cells = 10
 
     for i in copy_of_n_highest_letters_sorted:
-        current = i
-        for letter in bounding_box_for_each_letter[i]:
-            print(letter)
+        height = height_of_each_letter[i]
+        matrix_bb = bounding_box_for_each_letter[i]
+        weight = len(matrix_bb[0])
+
+        horizontal_ratio = weight//horizontal_cells
+        vertical_ratio = height//vertical_cells
+        values = []
+        for i in range(horizontal_cells):
+            for j in range(vertical_cells):
+                cellsum=0
+                for x in range(horizontal_ratio):
+                    for y in range(vertical_ratio):
+                        cellsum += matrix_bb[(j*vertical_ratio)+y][(i*horizontal_ratio)+x]
+                        #cellsum+=im.getpixel(((i*horizontal_ratio)+x,(j*vertical_ratio)+y))[0]
+                        #print(cellsum)
+                cellvalue = cellsum//(horizontal_ratio*vertical_ratio)
+                #print(cellvalue)
+                values.append(cellvalue)
+
+        counter = 0
+        
+        matrix = []
+
+        row = []
+
+        for element in values:
+            row.append(element)
+            counter += 1
+            if counter == vertical_cells:
+                matrix.append(row)
+                row = []
+                counter = 0
+
+        for i in matrix:
+            print(i)
+
         print('\n')
 
-    for i in copy_of_n_highest_letters_sorted:
-
-        matrix_bb = bounding_box_for_each_letter[i]
-        #  HEIGHT DOESN'T WORK, WHERE IS FLOW?
-        height = matlab.size(matrix_bb)
-        print(f'height {height}')
-        weight = len(matrix_bb[0])
-        print(f'weight {weight}')
-
-        height = 0
-        weight = 0
-
-        mean_for_row = []
-
-    #    #for row in matrix_bb:
-    #mean_for_row.append(matlab.mean(matrix, 2))
-
-        ## for every bounding box
-        #horizontal_cells = 10
-        #vertical_cells = 10
-        #horizontal_ratio = weight//horizontal_cells
-        #vertical_ratio = height//vertical_cells
-        #values = []
-
-
-
-        
-        #for i in range(horizontal_cells):
-        #    for j in range(vertical_cells):
-        #        cell_sum = 0
-        #        for x in range(horizontal_ratio):
-        #            for y in range(vertical_ratio):
-        #                #cell_sum += im.getpixel((i * horizontal_ratio) + x, (j * vertical_ratio) + y)[0]
-        #                print(f'matrix_bb[i * horizontal_ratio + x][j * vertical_ratio + y] {matrix_bb[i * horizontal_ratio + x][j * vertical_ratio + y]}')
-        #                cell_sum += matrix_bb[i * horizontal_ratio + x][j * vertical_ratio + y]
-        #                cell_value = cell_sum//(horizontal_ratio * vertical_ratio)
-#
-        #                values.append(cell_value)
-        
-        #bounding_box_for_each_letter[i] = values
-        #values = []
     return coordinates
-    # crop(left, upper, right, and lower)
 
 con_algo()
