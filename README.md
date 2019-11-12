@@ -29,8 +29,9 @@ How to use?
 1. Download greyscale image
 2. Add image to project directory
 3. Open main.py
-4. Specify path to image
-5. Evaluate how many letters are in the image. - Type it to terminal.
-6. Click enter.
+4. Run main.py
+5. Specify path to image
+6. Evaluate how many letters are in the image. - Type it to terminal.
+7. Click enter.
 
-Unfortunately the tool only recognises seperate letters, objects too.
+Unfortunately this tool only recognises seperate letters, objects too. Learning in progress.
